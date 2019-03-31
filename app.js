@@ -6,6 +6,11 @@ var auth = require('./auth');
 
 var app = express();
 
+/**
+ * 로그인 상태를 저장하기 위해 
+ * 세션을 사용
+ * 세션은 서버에 정보를 저장하는 방식이다.
+ */
 app.use(session({
     secret:'sjkdlfajsil mikle'
 }));
@@ -23,32 +28,6 @@ app.set('view engine', 'html');
 app.engine('html', require('ejs').renderFile);
 
 /**
- *  같은 표현
- *  function(req, res){
- *  }
- * 
- *  (req,res)=>{
- *  }
- */
-
- /**
-  *  var routing  = []
-  *  
-  * routing.push('/','get', callback );
-  * routing.push('/','get', callback );
-  * routing.push('/login','get', callback );
-  * routing.push('/login','post', callback );
-  * 
-  * for(var i =0; i< routing.length; i++){
-  * if(routing[i].url === url && routing[i].method=== method){
-  *     callback();    
-  *     break;
-  * }
-  * }
-  * 
-  */
-
-/**
  * 미들웨어
  */
 app.use((req,res,next)=>{
@@ -64,6 +43,20 @@ function authroize(req,res,next){
     }
 }
 
+/**
+ *  같은 표현
+ *  function(req, res){
+ *  }
+ * 
+ *  (req,res)=>{
+ *  }
+ */
+
+ /**
+  *  app.get('/', func1, func2...)
+  *  fun1에서 next()를 호출하면 func2가 호출된다. 
+  *  만약 뒤에 함수가 없을 시에 다음 라우팅을 확인한다. 
+  */
 app.get('/', authroize, (req,res,next)=>{
     //로그인이 안돼 있으면 login 페이지로 이동
     var test = [
@@ -83,10 +76,16 @@ app.get('/login', (req,res,next)=>{
     res.render('login', {});
 });
 
+/**
+ * 로그아웃
+ * req.session에 email을 undefined로 만들고
+ * login 페이지로 redirect한다.
+ */
 app.get('/logout', (req,res,next)=>{
     req.session.email = undefined;
     res.redirect('/login');
 });
+
 app.post('/login', (req,res,next)=>{
 
     var email = req.body.email;
