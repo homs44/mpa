@@ -1,0 +1,22 @@
+<header>
+    <div class='logo_wrapper'>
+        <div class='logo'>
+            logo
+        </div>
+    </div>
+
+    <nav>
+        <ul>
+            <% if(email){ %>
+            <li>
+                <a><%= email %></a>
+            </li>
+
+            <li>
+                <a href='/logout'>로그아웃</a>
+            </li>
+            <% } %>
+
+        </ul>
+    </nav>
+</header>
